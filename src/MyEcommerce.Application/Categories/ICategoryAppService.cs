@@ -4,6 +4,6 @@ using System;
 
 namespace MyEcommerce.Categories;
 
-public interface ICategoryAppService : IAsyncCrudAppService<CategoryDto, Guid>
+public interface ICategoryAppService : IAsyncCrudAppService<CategoryDto, Guid, GetAllCategoriesInput, CreateCategoryInput, UpdateCategoryInput>
 {
 }

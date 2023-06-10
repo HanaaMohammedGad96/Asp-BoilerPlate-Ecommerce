@@ -20,6 +20,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 using System.IO;
+using MyEcommerce.Helpers;
 
 namespace MyEcommerce.Web.Host.Startup
 {
