@@ -1,9 +1,11 @@
 ﻿using Abp.Application.Services;
-using Abp.Application.Services.Dto;
+using Abp.Authorization;
 using Abp.Domain.Repositories;
+using Abp.Localization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
+using Microsoft.EntityFrameworkCore;
+using MyEcommerce.Authorization;
 using MyEcommerce.Categories.Dto;
 using MyEcommerce.Entities.Categories;
 using MyEcommerce.Helpers;
@@ -16,17 +18,30 @@ namespace MyEcommerce.Categories;
 
 public class CategoryAppService : AsyncCrudAppService<Category, CategoryDto, Guid, GetAllCategoriesInput, CreateCategoryInput, UpdateCategoryInput>, ICategoryAppService
 {
+    private readonly IRepository<Category, Guid> _repository;
     private readonly IWebHostEnvironment _environment;
+    private readonly ILanguageManager _languageManager;
 
-    public CategoryAppService(IWebHostEnvironment environment, IRepository<Category, Guid> repository) : base(repository)
+    public CategoryAppService(IWebHostEnvironment environment, IRepository<Category, Guid> repository, ILanguageManager languageManager) : base(repository)
     {
         _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+        _languageManager = languageManager ?? throw new ArgumentNullException(nameof(languageManager));
     }
 
+    [AbpAuthorize(PermissionNames.Pages_Products)]
     protected override IQueryable<Category> CreateFilteredQuery(GetAllCategoriesInput input)
     {
-        return base.CreateFilteredQuery(input).Where(t => t.IsActive == input.IsActive);
+        var lang = _languageManager.CurrentLanguage.Name;
+
+        var query = base.CreateFilteredQuery(input).Where(t => t.IsActive == input.IsActive);
+
+        // Include translations based on user language
+        query = query.Include(t => t.Translations.Where(tr => tr.Language == lang));
+
+        return query;
+
     }
+
 
     public override async Task<CategoryDto> CreateAsync(CreateCategoryInput input)
     {
