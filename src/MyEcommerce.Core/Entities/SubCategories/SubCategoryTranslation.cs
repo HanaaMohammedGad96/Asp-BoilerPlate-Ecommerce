@@ -1,12 +1,11 @@
 ﻿using Abp.Domain.Entities;
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MyEcommerce.Entities.Categories;
+namespace MyEcommerce.Entities.SubCategories;
 
-[Table("AppCategoryTranslations")]
-public class CategoryTranslation :Entity, IEntityTranslation<Category>
+[Table("AppSubCategoryTranslations")]
+public class SubCategoryTranslation : Entity, IEntityTranslation<SubCategory>
 {
     public const int MaxNameLength = 256;
     public const int MaxDescriptionLength = 64 * 1024; //64KB
@@ -18,6 +17,6 @@ public class CategoryTranslation :Entity, IEntityTranslation<Category>
     [StringLength(MaxDescriptionLength)]
     public string Description { get; set; }
     public int CoreId { get; set; }
-    public Category Core { get; set; }
+    public SubCategory Core { get; set; }
     public string Language { get; set; }
 }
