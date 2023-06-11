@@ -36,7 +36,9 @@ namespace MyEcommerce
 
             Configuration.Settings.Providers.Add<AppSettingProvider>();
             
-            Configuration.Localization.Languages.Add(new LanguageInfo("fa", "فارسی", "famfamfam-flags ir"));
+           // Configuration.Localization.Languages.Add(new LanguageInfo("fa", "فارسی", "famfamfam-flags ir"));
+            Configuration.Localization.Languages.Add(new LanguageInfo("ar", "العربية", "famfamfam-flags sa"));
+            Configuration.Localization.Languages.Add(new LanguageInfo("en", "English", "famfamfam-flags us",true));
             
             Configuration.Settings.SettingEncryptionConfiguration.DefaultPassPhrase = MyEcommerceConsts.DefaultPassPhrase;
             SimpleStringCipher.DefaultPassPhrase = MyEcommerceConsts.DefaultPassPhrase;
