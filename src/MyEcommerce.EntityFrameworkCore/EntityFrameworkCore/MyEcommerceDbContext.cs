@@ -5,6 +5,7 @@ using MyEcommerce.Authorization.Users;
 using MyEcommerce.MultiTenancy;
 using MyEcommerce.Entities;
 using MyEcommerce.Entities.Categories;
+using MyEcommerce.Entities.SubCategories;
 
 namespace MyEcommerce.EntityFrameworkCore
 {
@@ -13,7 +14,9 @@ namespace MyEcommerce.EntityFrameworkCore
         /* Define a DbSet for each entity of the application */
 
         public DbSet<Category> Categories { get; set; }
+        public DbSet<CategoryTranslation> CategoryTranslations { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
+        public DbSet<SubCategoryTranslation> SubCategoryTranslations { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
 

@@ -4,6 +4,7 @@ using Abp.Domain.Repositories;
 using Abp.Localization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyEcommerce.Authorization;
 using MyEcommerce.Categories.Dto;
@@ -43,7 +44,7 @@ public class CategoryAppService : AsyncCrudAppService<Category, CategoryDto, Gui
     }
 
 
-    public override async Task<CategoryDto> CreateAsync(CreateCategoryInput input)
+    public override async Task<CategoryDto> CreateAsync([FromForm] CreateCategoryInput input)
     {
         string wwwPath = _environment.WebRootPath;
 

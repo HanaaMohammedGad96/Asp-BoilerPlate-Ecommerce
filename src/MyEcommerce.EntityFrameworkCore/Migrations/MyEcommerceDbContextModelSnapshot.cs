@@ -1633,7 +1633,7 @@ namespace MyEcommerce.Migrations
 
                     b.HasIndex("CoreId1");
 
-                    b.ToTable("CategoryTranslation");
+                    b.ToTable("AppCategoryTranslations");
                 });
 
             modelBuilder.Entity("MyEcommerce.Entities.Product", b =>
@@ -1738,7 +1738,7 @@ namespace MyEcommerce.Migrations
                     b.ToTable("AppProductImages");
                 });
 
-            modelBuilder.Entity("MyEcommerce.Entities.SubCategory", b =>
+            modelBuilder.Entity("MyEcommerce.Entities.SubCategories.SubCategory", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1753,14 +1753,6 @@ namespace MyEcommerce.Migrations
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("DescriptionArabic")
-                        .HasMaxLength(65536)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DescriptionEnglish")
-                        .HasMaxLength(65536)
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ImagePath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1774,21 +1766,44 @@ namespace MyEcommerce.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("NameArabic")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                    b.HasKey("Id");
 
-                    b.Property<string>("NameEnglish")
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("AppSubCategories");
+                });
+
+            modelBuilder.Entity("MyEcommerce.Entities.SubCategories.SubCategoryTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CoreId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("CoreId1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(65536)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Language")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CoreId1");
 
-                    b.ToTable("AppSubCategories");
+                    b.ToTable("AppSubCategoryTranslations");
                 });
 
             modelBuilder.Entity("MyEcommerce.MultiTenancy.Tenant", b =>
@@ -2084,7 +2099,7 @@ namespace MyEcommerce.Migrations
 
             modelBuilder.Entity("MyEcommerce.Entities.Product", b =>
                 {
-                    b.HasOne("MyEcommerce.Entities.SubCategory", "SubCategoryOfProduct")
+                    b.HasOne("MyEcommerce.Entities.SubCategories.SubCategory", "SubCategoryOfProduct")
                         .WithMany("Products")
                         .HasForeignKey("SubCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2104,7 +2119,7 @@ namespace MyEcommerce.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("MyEcommerce.Entities.SubCategory", b =>
+            modelBuilder.Entity("MyEcommerce.Entities.SubCategories.SubCategory", b =>
                 {
                     b.HasOne("MyEcommerce.Entities.Categories.Category", "Category")
                         .WithMany("SubCategories")
@@ -2113,6 +2128,15 @@ namespace MyEcommerce.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("MyEcommerce.Entities.SubCategories.SubCategoryTranslation", b =>
+                {
+                    b.HasOne("MyEcommerce.Entities.SubCategories.SubCategory", "Core")
+                        .WithMany("Translations")
+                        .HasForeignKey("CoreId1");
+
+                    b.Navigation("Core");
                 });
 
             modelBuilder.Entity("MyEcommerce.MultiTenancy.Tenant", b =>
@@ -2225,9 +2249,11 @@ namespace MyEcommerce.Migrations
                     b.Navigation("ImagesOfProduct");
                 });
 
-            modelBuilder.Entity("MyEcommerce.Entities.SubCategory", b =>
+            modelBuilder.Entity("MyEcommerce.Entities.SubCategories.SubCategory", b =>
                 {
                     b.Navigation("Products");
+
+                    b.Navigation("Translations");
                 });
 #pragma warning restore 612, 618
         }
