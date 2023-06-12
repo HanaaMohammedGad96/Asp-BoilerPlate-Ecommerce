@@ -9,6 +9,7 @@ namespace MyEcommerce.Categories.Dto;
 public class CreateCategoryInput
 {
     public IFormFile Image { get; set; }
+    //[SwaggerExclude]
     public string ImagePath { get; set; }
     public bool IsActive { get; set; }
 

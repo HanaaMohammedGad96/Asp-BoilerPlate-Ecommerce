@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MyEcommerce.Migrations
 {
     /// <inheritdoc />
-    public partial class AddCategoryAndSubCategoryAndProductAndProductImageEntities : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,14 +29,32 @@ namespace MyEcommerce.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AppCategoryTranslations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", maxLength: 65536, nullable: true),
+                    CoreId = table.Column<int>(type: "int", nullable: false),
+                    CoreId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Language = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppCategoryTranslations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppCategoryTranslations_AppCategories_CoreId1",
+                        column: x => x.CoreId1,
+                        principalTable: "AppCategories",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AppSubCategories",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    NameArabic = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    NameEnglish = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    DescriptionArabic = table.Column<string>(type: "nvarchar(max)", maxLength: 65536, nullable: true),
-                    DescriptionEnglish = table.Column<string>(type: "nvarchar(max)", maxLength: 65536, nullable: true),
                     ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -54,28 +72,6 @@ namespace MyEcommerce.Migrations
                         principalTable: "AppCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CategoryTranslation",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", maxLength: 65536, nullable: true),
-                    CoreId = table.Column<int>(type: "int", nullable: false),
-                    CoreId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Language = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CategoryTranslation", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CategoryTranslation_AppCategories_CoreId1",
-                        column: x => x.CoreId1,
-                        principalTable: "AppCategories",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -110,6 +106,28 @@ namespace MyEcommerce.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AppSubCategoryTranslations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", maxLength: 65536, nullable: true),
+                    CoreId = table.Column<int>(type: "int", nullable: false),
+                    CoreId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Language = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppSubCategoryTranslations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppSubCategoryTranslations_AppSubCategories_CoreId1",
+                        column: x => x.CoreId1,
+                        principalTable: "AppSubCategories",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AppProductImages",
                 columns: table => new
                 {
@@ -135,6 +153,11 @@ namespace MyEcommerce.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AppCategoryTranslations_CoreId1",
+                table: "AppCategoryTranslations",
+                column: "CoreId1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AppProductImages_ProductId",
                 table: "AppProductImages",
                 column: "ProductId");
@@ -150,8 +173,8 @@ namespace MyEcommerce.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CategoryTranslation_CoreId1",
-                table: "CategoryTranslation",
+                name: "IX_AppSubCategoryTranslations_CoreId1",
+                table: "AppSubCategoryTranslations",
                 column: "CoreId1");
         }
 
@@ -159,10 +182,13 @@ namespace MyEcommerce.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AppCategoryTranslations");
+
+            migrationBuilder.DropTable(
                 name: "AppProductImages");
 
             migrationBuilder.DropTable(
-                name: "CategoryTranslation");
+                name: "AppSubCategoryTranslations");
 
             migrationBuilder.DropTable(
                 name: "AppProducts");
