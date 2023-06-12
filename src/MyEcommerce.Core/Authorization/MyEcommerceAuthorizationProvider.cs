@@ -10,10 +10,16 @@ namespace MyEcommerce.Authorization
         {
             context.CreatePermission(PermissionNames.Pages_Users, L("Users"));
             context.CreatePermission(PermissionNames.Pages_Users_Activation, L("UsersActivation"));
+
             context.CreatePermission(PermissionNames.Pages_Roles, L("Roles"));
+
             context.CreatePermission(PermissionNames.Pages_Tenants, L("Tenants"), multiTenancySides: MultiTenancySides.Host);
+
             context.CreatePermission(PermissionNames.Pages_Products,L("Products"));
             context.CreatePermission(PermissionNames.Pages_CreateProduct, L("CreateProduct"));
+
+            context.CreatePermission(PermissionNames.Pages_SubCategory, L("SubCategory"));
+            context.CreatePermission(PermissionNames.Pages_CreateSubCategory, L("CreateSubCategory"));
         }
 
         private static ILocalizableString L(string name)

@@ -1,6 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
-using Microsoft.AspNetCore.Http;
 using MyEcommerce.Entities.Categories;
 using System;
 using System.Collections.Generic;

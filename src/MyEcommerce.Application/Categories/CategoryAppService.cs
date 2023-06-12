@@ -19,7 +19,6 @@ namespace MyEcommerce.Categories;
 
 public class CategoryAppService : AsyncCrudAppService<Category, CategoryDto, Guid, GetAllCategoriesInput, CreateCategoryInput, UpdateCategoryInput>, ICategoryAppService
 {
-    private readonly IRepository<Category, Guid> _repository;
     private readonly IWebHostEnvironment _environment;
     private readonly ILanguageManager _languageManager;
 
