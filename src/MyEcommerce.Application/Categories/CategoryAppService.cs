@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Services;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
+using Abp.Events.Bus;
 using Abp.Localization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using MyEcommerce.Authorization;
 using MyEcommerce.Categories.Dto;
 using MyEcommerce.Entities.Categories;
+using MyEcommerce.Events.Category;
 using MyEcommerce.Helpers;
 using System;
 using System.Linq;
@@ -21,12 +23,15 @@ public class CategoryAppService : AsyncCrudAppService<Category, CategoryDto, Gui
 {
     private readonly IWebHostEnvironment _environment;
     private readonly ILanguageManager _languageManager;
+    public IEventBus EventBus { get; set; }
 
     public CategoryAppService(IWebHostEnvironment environment, IRepository<Category, Guid> repository, ILanguageManager languageManager) : base(repository)
     {
         _environment = environment ?? throw new ArgumentNullException(nameof(environment));
         _languageManager = languageManager ?? throw new ArgumentNullException(nameof(languageManager));
+        EventBus = NullEventBus.Instance;
     }
+
 
     [AbpAuthorize(PermissionNames.Pages_Products)]
     protected override IQueryable<Category> CreateFilteredQuery(GetAllCategoriesInput input)
@@ -56,7 +61,11 @@ public class CategoryAppService : AsyncCrudAppService<Category, CategoryDto, Gui
             throw new BadHttpRequestException("invalid path");
         input.ImagePath = path;
 
-        return await base.CreateAsync(input);
+        var dto = await base.CreateAsync(input);
+
+        EventBus.Trigger(new CategoryCreatedEvent(dto.Id));
+
+        return dto;
     }
 
 }

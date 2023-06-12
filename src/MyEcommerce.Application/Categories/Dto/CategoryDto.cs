@@ -9,6 +9,7 @@ namespace MyEcommerce.Categories.Dto;
 [AutoMap(typeof(Category))]
 public class CategoryDto  : EntityDto<Guid>
 {
+    public Guid Id { get; set; }
     public string ImagePath { get; set; }
     public bool IsActive { get; set; }
 
